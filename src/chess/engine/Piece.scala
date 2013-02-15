@@ -81,9 +81,9 @@ case class King(val player: Player, val position: Position, val moved: Boolean =
     val straightMoves = (upMove :: downMove :: leftMove :: rightMove :: Nil).flatten
 
     (moved, player) match {
-      case (false, White) => (diagonalMoves ++ (Piece.whiteKingsideCastlePos :: Piece.whiteQueensideCastlePos :: straightMoves)) - position
-      case (false, Black) => (diagonalMoves ++ (Piece.blackKingsideCastlePos :: Piece.blackQueensideCastlePos :: straightMoves)) - position
-      case (true, _) => (diagonalMoves ++ straightMoves) - position
+      case (false, White) => (diagonalMoves ++ (Piece.whiteKingsideCastlePos :: Piece.whiteQueensideCastlePos :: straightMoves)).filterNot(_==position)
+      case (false, Black) => (diagonalMoves ++ (Piece.blackKingsideCastlePos :: Piece.blackQueensideCastlePos :: straightMoves)).filterNot(_==position)
+      case (true, _) => (diagonalMoves ++ straightMoves).filterNot(_==position)
     }
 
   }
@@ -111,8 +111,8 @@ case class Queen(val player: Player, val position: Position, val moved: Boolean 
     val leftMoves = availableMovesAcc(position, left, List[Position]())
     val rightMoves = availableMovesAcc(position, right, List[Position]())
 
-    val diagonalMoves = (ulMoves ++ dlMoves ++ uRMoves ++ drMoves) - position
-    val straightMoves = (upMoves ++ downMoves ++ leftMoves ++ rightMoves) - position
+    val diagonalMoves = (ulMoves ++ dlMoves ++ uRMoves ++ drMoves).filterNot(_==position)
+    val straightMoves = (upMoves ++ downMoves ++ leftMoves ++ rightMoves).filterNot(_==position)
     diagonalMoves ++ straightMoves
   }
 }
@@ -133,7 +133,7 @@ case class Bishop(val player: Player, val position: Position, val moved: Boolean
     val uRMoves = availableMovesAcc(position, upRight, List[Position]())
     val drMoves = availableMovesAcc(position, downRight, List[Position]())
 
-    (ulMoves ++ dlMoves ++ uRMoves ++ drMoves) - position
+    (ulMoves ++ dlMoves ++ uRMoves ++ drMoves).filterNot(_==position)
   }
 }
 
@@ -178,7 +178,7 @@ case class Rook(val player: Player, val position: Position, val moved: Boolean =
     val leftMoves = availableMovesAcc(position, left, List[Position]())
     val rightMoves = availableMovesAcc(position, right, List[Position]())
 
-    (upMoves ++ downMoves ++ leftMoves ++ rightMoves) - position
+    (upMoves ++ downMoves ++ leftMoves ++ rightMoves).filterNot(_==position)
   }
 
 }

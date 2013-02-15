@@ -30,7 +30,7 @@ object Analyser {
           val bestMoveForOpponent = g.suggestMove(timeLimit - elapsedTime, levelLimit - level)
           return g.move(bestMoveForOpponent._1, bestMoveForOpponent._2) :: acc
         } catch {
-          case _ => return acc
+          case _:Throwable => return acc
         }
       }
 
@@ -41,7 +41,7 @@ object Analyser {
       val continue = (level <= levelLimit) && (elapsedTime < timeLimit)
       if (continue && !m.isEmpty) {
         val nextLevel = (for (gPrime <- nextGames) yield search(gPrime, gPrime :: g :: acc, level + 1)).flatten.toList // TODO use suggestMove here?
-        nextLevel - g
+        nextLevel.filterNot(_==g)
       } else g :: acc
     }
 
